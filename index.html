@@ -202,106 +202,217 @@
             <a href="https://linkedin.com/in/yourusername">LinkedIn</a>
         </div>
     </footer>
-    <script src="https://threejs.org/build/three.js"></script>
+    <script src="perlin.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let scaleUp = true;
 
+        let noiseFactor = 1.75;
+        let currentScale = .001;
+        let targetScale = .45;
+        const scaleSpeed = 0.003;  
+        
+        function scaleAndIncreaseNoise() {
+            targetScale *= 1.2;  // Increase target size by 10%
+            noiseFactor += 0.25; // Adjust this value as desired
+        }
+        
+        function updateScale() {
+            if (Math.abs(currentScale - targetScale) > 0.01) {  
+                currentScale += (targetScale - currentScale) * scaleSpeed;       
+                sphere.scale.set(currentScale, currentScale, currentScale);
+            }
+        }
+        
+        
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
+        
         document.body.appendChild(renderer.domElement);
+        
         // Icosahedron Geometry
         const icosahedronGeometry = new THREE.IcosahedronGeometry(1);
-
+        
         // Material for Icosahedron
-        const icosahedronMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        const icosahedronMaterial = new THREE.MeshBasicMaterial({
+            color: 0xFFFFFF, // Color is white
+            transparent: true,
+            opacity: 0
+        });
 
+
+        
         // Create Icosahedron Mesh
         const icosahedron = new THREE.Mesh(icosahedronGeometry, icosahedronMaterial);
-
+        // For duplicated icosahedron
+        const duplicatedIcosahedronMaterial = new THREE.MeshBasicMaterial({         
+            color: 0xFEDD5C, // Color is white
+            transparent: true,
+            opacity: .3 }); // Blue color
+        const duplicatedIcosahedron = new THREE.Mesh(icosahedronGeometry, duplicatedIcosahedronMaterial);
+        duplicatedIcosahedron.position.x = -3; // Change this for desired position
+        
         // Wireframe for Icosahedron
         const wireframeGeometry = new THREE.EdgesGeometry(icosahedronGeometry);
-        const wireframeMaterial = new THREE.LineBasicMaterial({color: 0xff0000, linewidth: 2});
+        const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
         const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
-
+        // For duplicated wireframe
+        const duplicatedWireframeMaterial = new THREE.LineBasicMaterial({ color: 0xFFE781, linewidth: 2 });
+        const duplicatedWireframe = new THREE.LineSegments(wireframeGeometry, duplicatedWireframeMaterial);
+        duplicatedWireframe.position.x = -3; // Change this for desired position
+        
+        
         // Add Icosahedron and its wireframe to the scene
         scene.add(icosahedron);
         scene.add(wireframe);
-
-
-
-
-
-
+        scene.add(duplicatedIcosahedron); // Add duplicated icosahedron
+        scene.add(duplicatedWireframe); // Add duplicated wireframe
         
+        // Adjust the original Icosahedron and its wireframe to be on the right
+        icosahedron.position.x = 1.1; // Move it to the right
+        wireframe.position.x = 1.1;  // Move its wireframe to the right
+        // Adjust the duplicated Icosahedron and its wireframe to be on the left
+        duplicatedIcosahedron.position.x = -1.1; // Move it to the left
+        duplicatedWireframe.position.x = -1.1;   // Move its wireframe to the left
         const loader = new THREE.TextureLoader();
         const holographicTexture = loader.load('assets/1.png');
+        const duplicatedSphereTexture = loader.load('assets/4.jpeg'); // For duplicated sphere
+        
+        const sphereGeometry = new THREE.SphereGeometry(.3, 128, 128);
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+            map: holographicTexture,
+            transparent: false,
+            opacity: 1
+        });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.scale.set(.2, .2, .2);
+        sphere.castShadow = false;
+        scene.add(sphere);
+        
+        // For duplicated sphere
+        const duplicatedSphereMaterial = new THREE.MeshBasicMaterial({
+            map: duplicatedSphereTexture,
+            transparent: false,
+            opacity: 1
+        });
+        const duplicatedSphere = new THREE.Mesh(sphereGeometry, duplicatedSphereMaterial);
+        duplicatedSphere.scale.set(.2, .2, .2);
+        duplicatedSphere.position.x = 3; // Change this for desired position
+        scene.add(duplicatedSphere);
+        // Adjust the original sphere to be on the right
+        sphere.position.x = 1.1; // Move it to the right
 
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshLambertMaterial({ map: holographicTexture });
-        const cube = new THREE.Mesh(geometry, material);
-        cube.castShadow = true;
-        scene.add(cube);
+// Adjust the duplicated sphere to be on the left
+        duplicatedSphere.position.x = -1.1; // Move it to the left
+        
+        
+        window.addEventListener('click', onDocumentMouseClick, false);
 
-        const planeGeometry = new THREE.PlaneGeometry(10, 10);
-        const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.position.y = -0.5; // To put the plane slightly below the cube
-        plane.rotateX(-Math.PI / 2);
-        plane.receiveShadow = true;
-        scene.add(plane);
+        function onDocumentMouseClick(event) {
+            event.preventDefault();
+        
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        
+            raycaster.setFromCamera(mouse, camera);
+        
+            const intersects = raycaster.intersectObject(sphere);
+        
+            if (intersects.length > 0) {
+                scaleAndIncreaseNoise();
+            }
+        }
+        
+        var clock = new THREE.Clock();
 
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
-        scene.add(ambientLight);
+        var update = function() {
+            var elapsedTime = clock.getElapsedTime();
+            
+            const vertices = sphere.geometry.attributes.position.array;
+        
+            var time = performance.now() * 0.0001; // Getting time value
+            const sizeFactor = .1; // Modify this as desired for overall size scaling
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(2, 10, 5);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.camera.left = -5;
-        directionalLight.shadow.camera.right = 5;
-        directionalLight.shadow.camera.top = 5;
-        directionalLight.shadow.camera.bottom = -5;
-        directionalLight.shadow.mapSize.set(1024, 1024);
-        scene.add(directionalLight);
-
+            for (let i = 0; i < vertices.length; i += 3) {
+                const x = vertices[i];
+                const y = vertices[i + 1];
+                const z = vertices[i + 2];
+                
+                const p = new THREE.Vector3(x, y, z);
+                const displacement = 1 + noiseFactor * sizeFactor * noise.perlin3(p.x + time, p.y + time, p.z + time); 
+                // Note: multiplied by noiseFactor now
+                p.normalize().multiplyScalar(displacement);
+                
+                vertices[i] = p.x;
+                vertices[i + 1] = p.y;
+                vertices[i + 2] = p.z;
+            }
+            
+            
+            sphere.geometry.attributes.position.needsUpdate = true; // Inform three.js that the vertices have been modified
+            
+            sphere.geometry.computeVertexNormals(); // Recompute the vertex normals
+            sphere.geometry.normalsNeedUpdate = true; // Inform three.js to update normals
+        }
+        
         camera.position.z = 5;
+        
         function animate() {
             requestAnimationFrame(animate);
-        
+            // Pulsating effect for the left sphere
+            if (duplicatedSphere.scale.x < .34 && scaleUp) {
+                duplicatedSphere.scale.x += 0.0026;
+                duplicatedSphere.scale.y += 0.0024;
+                duplicatedSphere.scale.z += 0.0025;
+            } else {
+                scaleUp = false;
+            }
+
+            if (duplicatedSphere.scale.x > .24 && !scaleUp) {
+                duplicatedSphere.scale.x -= 0.0025;
+                duplicatedSphere.scale.y -= 0.0023;
+                duplicatedSphere.scale.z -= 0.0024;
+            } else {
+                scaleUp = true;
+            }
             // Rotate the Icosahedron
             icosahedron.rotation.x += 0.005;
             icosahedron.rotation.y += 0.005;
-        
-            // Rotate the wireframe (optional if you want it to rotate independently)
+    
+            // Rotate the wireframe
             wireframe.rotation.x += 0.005;
             wireframe.rotation.y += 0.005;
-        
-            renderer.render(scene, camera);
-        }
-        animate();
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
 
-        animate();
-        
-        window.addEventListener('resize', () => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-        
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-        });
-        
-        window.addEventListener('resize', () => {
+            // Add this for the sphere to spin
+            sphere.rotation.y += 0.005;
+
+            duplicatedIcosahedron.rotation.x += 0.01;
+            duplicatedIcosahedron.rotation.y += 0.01;
+
+            wireframe.rotation.x += 0.005;
+            wireframe.rotation.y += 0.005;
+
+            duplicatedWireframe.rotation.y += 0.01;
+            duplicatedWireframe.rotation.x += 0.01;
+
+            duplicatedSphere.rotation.x += 0.005;
+            duplicatedSphere.rotation.y += 0.005;
+
+    update();
+    updateScale();
+    renderer.render(scene, camera);
+    }
+            animate();
+
+            window.addEventListener('resize', () => {
             const newWidth = window.innerWidth;
             const newHeight = window.innerHeight;
             camera.aspect = newWidth / newHeight;

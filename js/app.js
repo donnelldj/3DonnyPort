@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // Navigation toggling (e.g. a mobile dropdown menu, if needed)
     const navToggleBtn = document.querySelector(".nav-toggle");

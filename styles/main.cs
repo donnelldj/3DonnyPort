@@ -123,3 +123,14 @@ footer a:hover {
     background-color: #000000;  /* Black background for the new section */
     color: #FFFFFF;  /* Brilliant white text for the new section */
 }
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
