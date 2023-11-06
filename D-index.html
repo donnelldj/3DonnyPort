@@ -15,10 +15,7 @@
             padding: 0;
             overflow-x: hidden;
         }
-        .portfolio-title {
-            color: #FF7F50; /* This is a blue color */
-        }
-        
+
         nav {
             background-color: #000000;
             display: flex;
@@ -186,7 +183,7 @@
     </header>
 
     <section>
-        <h2 class="portfolio-title">Donny's 3D Portfolio</h2>
+        <h2>Donny's 3D Portfolio</h2>
         <div class="offerings">
             <div>
                 <h3>The Depths of Devs</h3>
@@ -231,112 +228,112 @@
     
     <script>
 
-        particlesJS('particles-js', {
-            "particles": {
-            "number": {
-                "value": 200,
-                "density": {
-                "enable": true,
-                "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#000000"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                "width": 0,
-                "color": "#000000"
+            particlesJS('particles-js', {
+                "particles": {
+                "number": {
+                    "value": 200,
+                    "density": {
+                    "enable": true,
+                    "value_area": 800
+                    }
                 },
-                "polygon": {
-                "nb_sides": 5
+                "color": {
+                    "value": "#000000"
                 },
-                // images and characters are not supported in particles.js
-            },
-            "opacity": {
-                "value": 0.7,
-                "random": false,
-                "anim": {
-                "enable": true,
-                "speed": 1,
-                "opacity_min": 0.1,
-                "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                "enable": false,
-                "speed": 40,
-                "size_min": 0.1,
-                "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#000000",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 6,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                "enable": true,
-                "rotateX": 600,
-                "rotateY": 1200
-                }
-            }
-            },
-            "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                "enable": true,
-                "mode": "repulse"
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                    },
+                    "polygon": {
+                    "nb_sides": 5
+                    },
+                    // images and characters are not supported in particles.js
                 },
-                "onclick": {
-                "enable": true,
-                "mode": "push"
+                "opacity": {
+                    "value": 0.7,
+                    "random": false,
+                    "anim": {
+                    "enable": true,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                    }
                 },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                "distance": 400,
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                    "enable": false,
+                    "speed": 40,
+                    "size_min": 0.1,
+                    "sync": false
+                    }
+                },
                 "line_linked": {
-                    "opacity": 1
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#000000",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                    "enable": true,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                    }
                 }
                 },
-                "bubble": {
-                "distance": 400,
-                "size": 40,
-                "duration": 2,
-                "opacity": 8,
-                "speed": 3
+                "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                    "enable": true,
+                    "mode": "repulse"
+                    },
+                    "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                    },
+                    "resize": true
                 },
-                "repulse": {
-                "distance": 200,
-                "duration": 0.4
-                },
-                "push": {
-                "particles_nb": 4
-                },
-                "remove": {
-                "particles_nb": 2
+                "modes": {
+                    "grab": {
+                    "distance": 400,
+                    "line_linked": {
+                        "opacity": 1
+                    }
+                    },
+                    "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                    },
+                    "repulse": {
+                    "distance": 200,
+                    "duration": 0.4
+                    },
+                    "push": {
+                    "particles_nb": 4
+                    },
+                    "remove": {
+                    "particles_nb": 2
+                    }
                 }
-            }
-            },
-            "retina_detect": true
-        });
+                },
+                "retina_detect": true
+            });
             
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -374,9 +371,9 @@
         
         // Material for Icosahedron
         const icosahedronMaterial = new THREE.MeshBasicMaterial({
-            color: 0x000000, // Color is white
+            color: 0xFFFFFF, // Color is white
             transparent: true,
-            opacity: 0.3
+            opacity: 0
         });
 
 
@@ -385,7 +382,7 @@
         const icosahedron = new THREE.Mesh(icosahedronGeometry, icosahedronMaterial);
         // For duplicated icosahedron
         const duplicatedIcosahedronMaterial = new THREE.MeshBasicMaterial({         
-            color: 0x000000, // Color is white
+            color: 0xFEDD5C, // Color is white
             transparent: true,
             opacity: .3 }); // Blue color
         const duplicatedIcosahedron = new THREE.Mesh(icosahedronGeometry, duplicatedIcosahedronMaterial);
@@ -396,7 +393,7 @@
         const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
         const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
         // For duplicated wireframe
-        const duplicatedWireframeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2, opacity: 0.65 });
+        const duplicatedWireframeMaterial = new THREE.LineBasicMaterial({ color: 0xFFE781, linewidth: 2 });
         const duplicatedWireframe = new THREE.LineSegments(wireframeGeometry, duplicatedWireframeMaterial);
         duplicatedWireframe.position.x = -3; // Change this for desired position
         
@@ -558,28 +555,32 @@
                 scaleUp = true;
             }
             // Rotate the Icosahedron
-            icosahedron.rotation.x += 0.03;
-            icosahedron.rotation.y += 0.03;
+            icosahedron.rotation.x += 0.005;
+            icosahedron.rotation.y += 0.005;
     
             // Rotate the wireframe
-            wireframe.rotation.x += 0.03;
-            wireframe.rotation.y += 0.03;
+            wireframe.rotation.x += 0.005;
+            wireframe.rotation.y += 0.005;
 
             // Add this for the sphere to spin
-            sphere.rotation.y += 0.0015;
+            sphere.rotation.y += 0.005;
             sphere.rotation.z += 0.005;
             sphere.rotation.z += 0.005;
             sphere.rotation.y += 0.005;
             
-            duplicatedIcosahedron.rotation.y += 0.03;
-            duplicatedIcosahedron.rotation.x += 0.03;
+            duplicatedIcosahedron.rotation.y += 0.02;
 
+            wireframe.rotation.x += 0.005;
+            wireframe.rotation.y += 0.005;
 
+            wireframe.rotation.z += 0.005;
+            wireframe.rotation.y += 0.005;
 
+            wireframe.rotation.z += 0.005;
+            wireframe.rotation.y += 0.005;
 
-            duplicatedWireframe.rotation.x += 0.03;
-            duplicatedWireframe.rotation.y += 0.03;
-
+            duplicatedWireframe.rotation.y += 0.02;
+            
 
             duplicatedSphere.rotation.x += 0.005;
             duplicatedSphere.rotation.y += 0.005;

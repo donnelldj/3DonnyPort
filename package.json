@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "particles.js": "^2.0.0",
     "three": "^0.158.0"
   }
 }
